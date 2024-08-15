@@ -32,6 +32,7 @@
             decryptButton = new Button();
             textBoxInput = new TextBox();
             textBoxOutput = new TextBox();
+            ShowAllDataButton = new Button();
             SuspendLayout();
             // 
             // EncryptButton
@@ -68,11 +69,22 @@
             textBoxOutput.Size = new Size(652, 31);
             textBoxOutput.TabIndex = 3;
             // 
+            // ShowAllDataButton
+            // 
+            ShowAllDataButton.Location = new Point(326, 278);
+            ShowAllDataButton.Name = "ShowAllDataButton";
+            ShowAllDataButton.Size = new Size(112, 34);
+            ShowAllDataButton.TabIndex = 4;
+            ShowAllDataButton.Text = "button1";
+            ShowAllDataButton.UseVisualStyleBackColor = true;
+            ShowAllDataButton.Click += ShowAllDataButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(ShowAllDataButton);
             Controls.Add(textBoxOutput);
             Controls.Add(textBoxInput);
             Controls.Add(decryptButton);
@@ -89,5 +101,6 @@
         private Button decryptButton;
         private TextBox textBoxInput;
         private TextBox textBoxOutput;
+        private Button ShowAllDataButton;
     }
 }

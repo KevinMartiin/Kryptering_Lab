@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Data.SQLite;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -109,6 +112,7 @@ namespace GruppLabKryptering
                 }
                 return Convert.ToBase64String(ms.ToArray());
             }
+
         }
         private string DecryptString(string encryptedText, string password)
         {
@@ -129,6 +133,57 @@ namespace GruppLabKryptering
                 }
                 return System.Text.Encoding.UTF8.GetString(ms.ToArray());
             }
+        }
+
+        private void ShowAllDataButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var context = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=encryptiondb.db").Options))
+                {
+                    var allData = context.message.ToList();
+
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var data in allData)
+                    {
+                        // Konvertera byte-array till en Base64-sträng för att kunna visa den i MessageBox
+                        string saltBase64 = Convert.ToBase64String(data.Salt);
+                        sb.AppendLine($"ID: {data.Id}");
+                        sb.AppendLine($"EncryptedText: {data.EncryptedText}");
+                        sb.AppendLine($"Salt (Base64): {saltBase64}");
+                        sb.AppendLine();  // Lägg till en tom rad mellan poster
+                    }
+
+                    MessageBox.Show(sb.ToString(), "All Data");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error");
+            }
+            //string connectionString = "Data Source=encryptiondb.db";
+
+            //try
+            //{
+            //    using (var connection = new SQLiteConnection(connectionString))
+            //    {
+            //        connection.Open();
+
+            //        DataTable schemaTable = connection.GetSchema("Tables");
+            //        string tables = "Tables in the database:\n";
+
+            //        foreach (DataRow row in schemaTable.Rows)
+            //        {
+            //            tables += row["TABLE_NAME"].ToString() + "\n";
+            //        }
+
+            //        MessageBox.Show(tables, "Database Tables");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Error: {ex.Message}", "Error");
+            //}
         }
     }
 }

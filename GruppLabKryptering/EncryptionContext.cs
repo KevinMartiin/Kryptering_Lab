@@ -7,13 +7,21 @@ using System.Threading.Tasks;
 
 namespace GruppLabKryptering
 {
-    public class EncryptionContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public DbSet<EncryptedData> EncryptedDataEntries { get; set; }
+        public DbSet<EncryptedData> message { get; set; }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=EncryptionData.db");
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=encryptiondb.db");
+            }
         }
     }
 }
