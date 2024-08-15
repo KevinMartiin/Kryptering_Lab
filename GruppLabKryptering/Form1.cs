@@ -35,6 +35,7 @@ namespace GruppLabKryptering
             string plaintext = textBoxInput.Text;  // Input från användaren
             string encryptedText = EncryptString(plaintext, password);
             textBoxOutput.Text = encryptedText; // Visa det krypterade resultatet
+            SaveEncryptedDataToDatabase(encryptedText, salt);
         }
         public void decryptButton_Click(object sender, EventArgs e)
         {
@@ -184,6 +185,32 @@ namespace GruppLabKryptering
             //{
             //    MessageBox.Show($"Error: {ex.Message}", "Error");
             //}
+        }
+        private void SaveEncryptedDataToDatabase(string encryptedText, byte[] salt)
+        {
+            try
+            {
+                using (var context = new AppDbContext(new DbContextOptionsBuilder<AppDbContext>().UseSqlite("Data Source=encryptiondb.db").Options))
+                {
+                    // Skapa en ny instans av EncryptedData
+                    var encryptedData = new EncryptedData
+                    {
+                        EncryptedText = encryptedText,
+                        Salt = salt
+                    };
+
+                    // Lägg till instansen i DbContext
+                    context.message.Add(encryptedData);
+
+                    // Spara ändringarna till databasen
+                    context.SaveChanges();
+                }
+                MessageBox.Show("Data saved successfully.", "Success");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error");
+            }
         }
     }
 }
